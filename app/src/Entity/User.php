@@ -49,7 +49,7 @@ class User
     /**
      * @var DateTime $deletedAt
      *
-     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $deletedAt;
 
