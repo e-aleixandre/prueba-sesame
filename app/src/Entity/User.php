@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -13,6 +14,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class User
 {
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -29,22 +32,6 @@ class User
      * @ORM\Column(type="string", length=255)
      */
     private $email;
-
-    /**
-     * @var DateTime $createdAt
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @var DateTime $updatedAt
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
-    private $updatedAt;
 
     /**
      * @var DateTime $deletedAt
@@ -80,16 +67,6 @@ class User
         $this->email = $email;
 
         return $this;
-    }
-
-    public function getCreatedAt(): DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function getUpdatedAt(): DateTime
-    {
-        return $this->updatedAt;
     }
 
     public function getDeletedAt(): DateTime
