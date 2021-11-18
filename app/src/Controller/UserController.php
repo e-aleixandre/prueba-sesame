@@ -3,42 +3,64 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use http\Client\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class UserController extends AbstractController
 {
     /**
      * Get all users
      *
-     * @Route("/user", name="user_index", methods={ "GET" })
+     * @Route("/users", name="user_index", methods={ "GET" })
      */
-    public function index() : Response {
-        return new Response("Response");
+    public function index(UserRepository $userRepository) : Response {
+        $users = $userRepository->findAll();
+
+        $usersArray = [];
+
+        foreach ($users as $user) {
+            $usersArray[] = $user->getAsArray();
+        }
+
+        return $this->json($usersArray);
     }
 
     /**
      * Get a single user
+     *
+     * @Route("/users/{id}", name="user_show", methods={ "GET" })
      */
-    public function show() {
+    public function show($id, UserRepository $userRepository) {
+        $user = $userRepository->find($id);
 
+        if (!$user)
+            throw $this->createNotFoundException();
+
+        return $this->json($user->getAsArray());
     }
 
     /**
      *
-     * @Route("/user", name="user_create", methods={"POST"})
+     * @Route("/users", name="user_create", methods={"POST"})
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function create() {
+    public function create(EntityManagerInterface $entityManager) {
         $user = new User();
         $user->setEmail("test@test.com")
             ->setName("John Doe");
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($user);
-        $em->flush();
+        $entityManager->persist($user);
+        $entityManager->flush();
 
         return $this->json([
             "ok" => true,

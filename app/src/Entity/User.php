@@ -29,7 +29,7 @@ class User
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $email;
 
@@ -69,7 +69,7 @@ class User
         return $this;
     }
 
-    public function getDeletedAt(): DateTime
+    public function getDeletedAt(): ?DateTime
     {
         return $this->deletedAt;
     }
@@ -79,5 +79,16 @@ class User
         $this->deletedAt = $deletedAt;
 
         return $this;
+    }
+
+    public function getAsArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'createdAt' => $this->createdAt,
+            'updatedAt' => $this->updatedAt
+        ];
     }
 }
