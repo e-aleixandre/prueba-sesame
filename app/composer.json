@@ -19,6 +19,7 @@
         "symfony/framework-bundle": "5.3.*",
         "symfony/proxy-manager-bridge": "5.3.*",
         "symfony/runtime": "5.3.*",
+        "symfony/validator": "5.3.*",
         "symfony/yaml": "5.3.*"
     },
     "config": {
@@ -65,6 +66,8 @@
         }
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.36"
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "symfony/maker-bundle": "^1.36",
+        "zenstruck/foundry": "^1.14"
     }
 }

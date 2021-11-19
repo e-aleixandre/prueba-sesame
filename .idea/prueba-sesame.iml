@@ -62,6 +62,16 @@
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/doctrine/sql-formatter" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/gedmo/doctrine-extensions" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/behat/transliterator" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/property-info" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/property-access" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/zenstruck/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/fakerphp/faker" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/zenstruck/foundry" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/zenstruck/callback" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/doctrine/doctrine-fixtures-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/doctrine/data-fixtures" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/validator" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/translation-contracts" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
