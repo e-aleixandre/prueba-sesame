@@ -14,10 +14,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserController extends AbstractController
 {
+    private ValidatorInterface $validator;
+
+    public function __construct(ValidatorInterface $validator) {
+        $this->validator = $validator;
+    }
+
     /**
      * Get all users
      *
@@ -63,31 +70,17 @@ class UserController extends AbstractController
      * @Route("/users", name="user_create", methods={"POST"})
      * @param Request $request
      * @param ValidationErrors $validationErrors
-     * @param ValidatorInterface $validator
      * @param EntityManagerInterface $entityManager
      *
      * @return JsonResponse
      */
-    public function create(Request $request, ValidationErrors $validationErrors, ValidatorInterface $validator, EntityManagerInterface $entityManager): JsonResponse
+    public function create(Request $request, ValidationErrors $validationErrors, EntityManagerInterface $entityManager): JsonResponse
     {
-        // Validating the input
-        $constraints = new Assert\Collection([
-            'name' => [
-                new Assert\NotBlank(),
-                new Assert\Type(['type' => 'string'])
-            ],
-            'email' => [
-                new Assert\NotBlank(),
-                new Assert\Email()
-            ]
-        ]);
-
-        $violations = $validator->validate($request->request->all(), $constraints);
+        $violations = $this->validateUser($request->request->all());
 
         // If there are input errors, parse them and respond
         if ($violations->count())
         {
-
             return $this->json($validationErrors->parse($violations), 400);
         }
 
@@ -100,6 +93,44 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         return $this->json($user->getAsArray(), 201);
+    }
+
+    /**
+     * Update a user
+     *
+     * @Route("/users/{id}", name="user_update", methods={ "PUT" })
+     *
+     * @param $id
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @param ValidationErrors $validationErrors
+     * @param EntityManagerInterface $entityManager
+     * @return JsonResponse
+     */
+    public function update($id, Request $request, UserRepository $userRepository,ValidationErrors $validationErrors, EntityManagerInterface $entityManager): JsonResponse
+    {
+
+        $user = $userRepository->find($id);
+
+        // Throw 404 if no user is found
+        if (!$user)
+            throw $this->createNotFoundException();
+
+        // Validate the input
+        $violations = $this->validateUser($request->request->all());
+
+        if ($violations->count())
+        {
+            return $this->json($validationErrors->parse($violations), 400);
+        }
+
+        // The user exists and the input is correct
+        $user->setEmail($request->get('email'))
+            ->setName($request->get('name'));
+
+        $entityManager->flush();
+
+        return $this->json($user->getAsArray());
     }
 
     /**
@@ -123,5 +154,27 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         return $this->json($user->getAsArray());
+    }
+
+    /**
+     * Helper function to validate User related input
+     *
+     * @param $data
+     * @return ConstraintViolationListInterface
+     */
+    private function validateUser($data): ConstraintViolationListInterface
+    {
+        $constraints = new Assert\Collection([
+            'name' => [
+                new Assert\NotBlank(),
+                new Assert\Type(['type' => 'string'])
+            ],
+            'email' => [
+                new Assert\NotBlank(),
+                new Assert\Email()
+            ]
+        ]);
+
+        return $this->validator->validate($data, $constraints);
     }
 }
