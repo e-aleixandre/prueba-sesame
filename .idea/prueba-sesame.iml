@@ -72,6 +72,7 @@
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/doctrine/data-fixtures" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/validator" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/translation-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony-bundles/json-request-bundle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

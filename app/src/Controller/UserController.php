@@ -6,6 +6,8 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -66,7 +68,8 @@ class UserController extends AbstractController
 
         $constraints = new Assert\Collection([
             'name' => [
-                new Assert\NotBlank()
+                new Assert\NotBlank(),
+                new Assert\Type(['type' => 'string'])
             ],
             'email' => [
                 new Assert\NotBlank(),
@@ -75,15 +78,19 @@ class UserController extends AbstractController
         ]);
 
         $violations = $validator->validate($request->request->all(), $constraints);
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         if ($violations->count())
         {
             $errors = [];
 
             foreach ($violations as $violation)
-                $errors[] = $violation->getMessage();
+            {
+                $entryErrors = (array) $propertyAccessor->getValue($errors, $violation->getPropertyPath());
+                $entryErrors[] = $violation->getMessage();
+                $propertyAccessor->setValue($errors, $violation->getPropertyPath(), $entryErrors);
+            }
 
-            // TODO: Add the field name on each error
             return $this->json($errors, 400);
         }
 
