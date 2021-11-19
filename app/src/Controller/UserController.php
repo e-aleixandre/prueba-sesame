@@ -62,6 +62,7 @@ class UserController extends AbstractController
      *
      * @Route("/users", name="user_create", methods={"POST"})
      * @param Request $request
+     * @param ValidationErrors $validationErrors
      * @param ValidatorInterface $validator
      * @param EntityManagerInterface $entityManager
      *
@@ -69,8 +70,7 @@ class UserController extends AbstractController
      */
     public function create(Request $request, ValidationErrors $validationErrors, ValidatorInterface $validator, EntityManagerInterface $entityManager): JsonResponse
     {
-        $user = new User();
-
+        // Validating the input
         $constraints = new Assert\Collection([
             'name' => [
                 new Assert\NotBlank(),
@@ -84,12 +84,15 @@ class UserController extends AbstractController
 
         $violations = $validator->validate($request->request->all(), $constraints);
 
+        // If there are input errors, parse them and respond
         if ($violations->count())
         {
 
             return $this->json($validationErrors->parse($violations), 400);
         }
 
+        // No errors, create the new user
+        $user = new User();
         $user->setName($request->get('name'))
             ->setEmail($request->get('email'));
 
