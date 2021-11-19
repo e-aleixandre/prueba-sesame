@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\ValidationErrors;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -22,6 +23,7 @@ class UserController extends AbstractController
      *
      * @Route("/users", name="user_index", methods={ "GET" })
      * @param UserRepository $userRepository
+     *
      * @return JsonResponse
      */
     public function index(UserRepository $userRepository): JsonResponse {
@@ -42,6 +44,7 @@ class UserController extends AbstractController
      * @Route("/users/{id}", name="user_show", methods={ "GET" })
      * @param $id
      * @param UserRepository $userRepository
+     *
      * @return JsonResponse
      */
     public function show($id, UserRepository $userRepository): JsonResponse
@@ -55,14 +58,16 @@ class UserController extends AbstractController
     }
 
     /**
+     * Creates a new user
      *
      * @Route("/users", name="user_create", methods={"POST"})
      * @param Request $request
      * @param ValidatorInterface $validator
      * @param EntityManagerInterface $entityManager
      *
+     * @return JsonResponse
      */
-    public function create(Request $request, ValidatorInterface $validator, EntityManagerInterface $entityManager)
+    public function create(Request $request, ValidationErrors $validationErrors, ValidatorInterface $validator, EntityManagerInterface $entityManager): JsonResponse
     {
         $user = new User();
 
@@ -78,20 +83,11 @@ class UserController extends AbstractController
         ]);
 
         $violations = $validator->validate($request->request->all(), $constraints);
-        $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         if ($violations->count())
         {
-            $errors = [];
 
-            foreach ($violations as $violation)
-            {
-                $entryErrors = (array) $propertyAccessor->getValue($errors, $violation->getPropertyPath());
-                $entryErrors[] = $violation->getMessage();
-                $propertyAccessor->setValue($errors, $violation->getPropertyPath(), $entryErrors);
-            }
-
-            return $this->json($errors, 400);
+            return $this->json($validationErrors->parse($violations), 400);
         }
 
         $user->setName($request->get('name'))
@@ -110,6 +106,7 @@ class UserController extends AbstractController
      * @param $id
      * @param UserRepository $userRepository
      * @param EntityManagerInterface $entityManager
+     *
      * @return JsonResponse
      */
     public function delete($id, UserRepository $userRepository, EntityManagerInterface $entityManager): JsonResponse
