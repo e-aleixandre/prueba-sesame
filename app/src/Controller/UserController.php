@@ -109,7 +109,6 @@ class UserController extends AbstractController
      */
     public function update($id, Request $request, UserRepository $userRepository,ValidationErrors $validationErrors, EntityManagerInterface $entityManager): JsonResponse
     {
-
         $user = $userRepository->find($id);
 
         // Throw 404 if no user is found
@@ -154,6 +153,30 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         return $this->json($user->getAsArray());
+    }
+
+    /**
+     * Show all WorkEntries from a User
+     *
+     * @Route("/users/{id}/workentries", name="user_workentries", methods={"GET"})
+     */
+    public function getUserWorkEntries($id, UserRepository $userRepository): JsonResponse
+    {
+        $user = $userRepository->find($id);
+
+        if (!$user)
+            throw $this->createNotFoundException();
+
+        $workEntries = $user->getWorkEntries();
+
+        $workEntriesArray = [];
+
+        foreach ($workEntries as $workEntry)
+        {
+            $workEntriesArray[] = $workEntry->getAsArray();
+        }
+
+        return $this->json($workEntriesArray);
     }
 
     /**
