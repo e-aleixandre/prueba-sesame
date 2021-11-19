@@ -15,7 +15,7 @@ class AppFixtures extends Fixture
 
         WorkEntryFactory::createMany(40,
             function() {
-                return [ 'userId' => UserFactory::random() ];
+                return [ 'user' => UserFactory::random() ];
             }
         );
     }
