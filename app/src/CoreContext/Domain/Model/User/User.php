@@ -1,20 +1,24 @@
 <?php
 
+namespace App\CoreContext\Domain\Model\User;
+
+use App\CoreContext\Domain\ValueObject\User\Email;
+use App\CoreContext\Domain\ValueObject\User\UserName;
 use Carbon\CarbonImmutable;
 use Ramsey\Uuid\Uuid;
 
 class User
 {
     private string $id;
-    private UserName $name;
-    private Email $email;
+    private string $name;
+    private string $email;
     private CarbonImmutable $createdAt;
     private CarbonImmutable $updatedAt;
     private ?CarbonImmutable $deletedAt;
 
     public function __construct(
-        UserName $name,
-        Email $email
+        string $name,
+        string $email
     )
     {
         $this->id = Uuid::uuid4()->toString();
@@ -30,12 +34,12 @@ class User
         return $this->id;
     }
 
-    public function name(): UserName
+    public function name(): string
     {
         return $this->name;
     }
 
-    public function email(): Email
+    public function email(): string
     {
         return $this->email;
     }

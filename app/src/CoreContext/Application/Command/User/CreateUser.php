@@ -1,22 +1,24 @@
 <?php
 
+namespace App\CoreContext\Application\Command\User;
+
 class CreateUser
 {
-    private UserName $name;
-    private Email $email;
+    private string $name;
+    private string $email;
 
-    public function __construct(UserName $name, Email $email)
+    public function __construct(string $name, string $email)
     {
         $this->name = $name;
         $this->email = $email;
     }
 
-    public function name(): UserName
+    public function name(): string
     {
         return $this->name;
     }
 
-    public function email(): Email
+    public function email(): string
     {
         return $this->email;
     }

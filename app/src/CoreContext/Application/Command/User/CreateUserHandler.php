@@ -1,5 +1,8 @@
 <?php
 
+namespace App\CoreContext\Application\Command\User;
+
+use App\CoreContext\Domain\Model\User\User;
 use App\CoreContext\Domain\Model\User\UserRepository;
 
 class CreateUserHandler
