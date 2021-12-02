@@ -18,4 +18,9 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
     {
         return User::class;
     }
+
+    public function byId(string $id): ?User
+    {
+        return $this->find($id);
+    }
 }
