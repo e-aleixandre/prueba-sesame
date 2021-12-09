@@ -62,12 +62,11 @@ class WorkEntry
     {
         $this->deletedAt = $this->updatedAt = CarbonImmutable::now()->utc();
 
-        // TODO: Dispatch UserDeleted event
+        // TODO: Dispatch WorkEntryDeleted event
     }
 
-    public function update(string $userId, CarbonImmutable $startDate, ?CarbonImmutable $endDate): void
+    public function update(CarbonImmutable $startDate, ?CarbonImmutable $endDate): void
     {
-        $this->userId = $userId;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->updatedAt = CarbonImmutable::now()->utc();

@@ -4,6 +4,8 @@ namespace App\CoreContext\Infrastructure\Controller\Api\v1\WorkEntry;
 
 use App\CoreContext\Application\Command\WorkEntry\CreateWorkEntry;
 use App\CoreContext\Application\Command\WorkEntry\CreateWorkEntryHandler;
+use App\CoreContext\Application\Command\WorkEntry\UpdateWorkEntry;
+use App\CoreContext\Application\Command\WorkEntry\UpdateWorkEntryHandler;
 use App\CoreContext\Application\Query\WorkEntry\FindWorkEntriesByUser;
 use App\CoreContext\Application\Query\WorkEntry\FindWorkEntriesByUserHandler;
 use App\CoreContext\Application\Query\WorkEntry\FindWorkEntriesQuery;
@@ -11,6 +13,7 @@ use App\CoreContext\Application\Query\WorkEntry\FindWorkEntriesQueryHandler;
 use App\CoreContext\Application\Query\WorkEntry\FindWorkEntryQuery;
 use App\CoreContext\Application\Query\WorkEntry\FindWorkEntryQueryHandler;
 use App\CoreContext\Infrastructure\Validator\Application\Command\WorkEntry\CreateWorkEntryValidator;
+use App\CoreContext\Infrastructure\Validator\Application\Command\WorkEntry\UpdateWorkEntryValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -92,5 +95,26 @@ class WorkEntryController extends AbstractController
         $handler->handle($command);
 
         return $this->json(null, 201);
+    }
+
+    /** @Route("/workentries/{id}", methods={"PUT"}) */
+    public function update(string $id, Request $request, UpdateWorkEntryValidator $updateWorkEntryValidator,UpdateWorkEntryHandler $updateWorkEntryHandler, FindWorkEntryQueryHandler $findWorkEntryQueryHandler)
+    {
+        $params = $request->request->all();
+
+        $updateWorkEntryValidator->validate($params);
+
+        $endDate = $params["endDate"] ?? null;
+
+        $command = new UpdateWorkEntry(
+            $id,
+            $params["startDate"],
+            $endDate
+        );
+
+        $updateWorkEntryHandler->handle($command);
+
+        // TODO: Find a better ay to pass $workEntryQueryHandler
+        return $this->show($command->id(), $findWorkEntryQueryHandler);
     }
 }
