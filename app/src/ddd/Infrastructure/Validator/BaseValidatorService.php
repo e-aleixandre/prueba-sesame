@@ -2,9 +2,7 @@
 
 namespace App\ddd\Infrastructure\Validator;
 
-use Illuminate\Validation\ValidationException;
 use Symfony\Component\Validator\Constraints\Collection;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -23,8 +21,11 @@ abstract class BaseValidatorService implements BaseValidatorInterface
     {
         $validated = $this->validator->validate($data, $this->constraints());
 
-        // TODO: Raise a different exception per violation
         if ($validated->count())
-            throw new ValidatorException();
+        {
+            $violation = $validated->get(0);
+            $message = $violation->getPropertyPath() . ": " . $violation->getMessage();
+            throw new ValidatorException($message);
+        }
     }
 }
