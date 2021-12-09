@@ -27,8 +27,8 @@ GET /users/{id}/workentries
 
 ### WorkEntry
 ```
-POST /workentry
-PUT /workentry/{id}
-DELETE /workentry/{id}
-GET /workentry/{id}
+POST /workentries
+PUT /workentries/{id}
+DELETE /workentries/{id}
+GET /workentries/{id}
 ```
