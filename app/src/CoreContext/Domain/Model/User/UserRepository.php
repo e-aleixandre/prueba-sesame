@@ -8,4 +8,5 @@ interface UserRepository
     public function byId(string $id): ?User;
     /** @return User[] */
     public function query($params): array;
+    public function exists(string $id): bool;
 }

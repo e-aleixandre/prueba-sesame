@@ -2,6 +2,7 @@
 
 namespace App\CoreContext\Infrastructure\Validator\Application\Command\WorkEntry;
 
+use App\CoreContext\Infrastructure\Constraints\UserId;
 use App\ddd\Infrastructure\Validator\BaseValidatorService;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -17,7 +18,7 @@ class CreateWorkEntryValidator extends BaseValidatorService
            self::USER_ID => [
                new Assert\NotNull(),
                new Assert\NotBlank(),
-               // TODO: Assert\UserExists
+               new UserId()
            ],
             self::START_DATE => [
                 new Assert\NotNull(),

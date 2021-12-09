@@ -2,8 +2,8 @@
 
 namespace App\Factory;
 
-use App\Entity\WorkEntry;
-use App\Repository\WorkEntryRepository;
+use App\CoreContext\Domain\Model\WorkEntry\WorkEntry;
+use App\CoreContext\Domain\Model\WorkEntry\WorkEntryRepository;
 use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;

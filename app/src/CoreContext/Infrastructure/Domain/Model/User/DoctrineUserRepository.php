@@ -32,4 +32,9 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
             ->andWhere('user.deletedAt IS NULL')
             ->getQuery()->getResult();
     }
+
+    public function exists(string $id): bool
+    {
+        return $this->count(['id' => $id]) !== 0;
+    }
 }

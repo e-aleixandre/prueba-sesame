@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Validator;
+namespace App\CoreContext\Infrastructure\Constraints;
 
-use App\Repository\UserRepository;
+use App\CoreContext\Domain\Model\User\UserRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -24,7 +24,7 @@ class UserIdValidator extends ConstraintValidator
         if (null === $value || '' === $value)
             return;
 
-        $count = $this->userRepository->count(['id' => $value]);
+        $count = $this->userRepository->exists($value);
 
         if (!$count)
         {
