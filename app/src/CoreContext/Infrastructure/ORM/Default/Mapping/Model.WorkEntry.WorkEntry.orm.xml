@@ -1,0 +1,41 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping">
+    <entity name="App\CoreContext\Domain\Model\WorkEntry\WorkEntry"
+            table="core_context_workentry">
+        <indexes>
+            <index name="deleted_atx" columns="deleted_at"/>
+        </indexes>
+        <id name="id" type="string" column="id" length="36">
+            <options>
+                <option name="fixed">true</option>
+                <option name="charset">ascii</option>
+            </options>
+        </id>
+
+        <field name="userId" type="string" length="36" />
+        <field name="startDate" type="carbon">
+            <options>
+                <option name="charset">ascii</option>
+            </options>
+        </field>
+        <field name="endDate" type="carbon" nullable="true">
+            <options>
+                <option name="charset">ascii</option>
+            </options>
+        </field>
+        <field name="createdAt" type="carbon">
+            <options>
+                <option name="charset">ascii</option>
+            </options>
+        </field>
+        <field name="updatedAt" type="carbon">
+            <options>
+                <option name="charset">ascii</option>
+            </options>
+        </field>
+        <field name="deletedAt" type="carbon" nullable="true">
+            <options>
+                <option name="charset">ascii</option>
+            </options>
+        </field>
+    </entity>
+</doctrine-mapping>

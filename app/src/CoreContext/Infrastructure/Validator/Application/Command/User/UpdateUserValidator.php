@@ -5,7 +5,7 @@ namespace App\CoreContext\Infrastructure\Validator\Application\Command\User;
 use App\ddd\Infrastructure\Validator\BaseValidatorService;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateUserValidator extends BaseValidatorService
+class UpdateUserValidator extends BaseValidatorService
 {
     private const NAME = 'name';
     private const EMAIL = 'email';
@@ -14,11 +14,9 @@ class CreateUserValidator extends BaseValidatorService
     {
         return new Assert\Collection([
             self::NAME => [
-                new Assert\NotNull(),
                 new Assert\NotBlank()
             ],
             self::EMAIL => [
-                new Assert\NotNull(),
                 new Assert\NotBlank(),
                 new Assert\Email()
             ]

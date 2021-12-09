@@ -1,7 +1,9 @@
-controllers:
+user_controller:
     resource: ../../src/CoreContext/Infrastructure/Controller/Api/v1/User
     type: annotation
-
+workentry_controller:
+    resource: ../../src/CoreContext/Infrastructure/Controller/Api/v1/WorkEntry
+    type: annotation
 kernel:
     resource: ../../src/Kernel.php
     type: annotation

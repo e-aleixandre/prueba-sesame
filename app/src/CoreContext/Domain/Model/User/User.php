@@ -61,4 +61,13 @@ class User
         // TODO: Dispatch UserDeleted event
     }
 
+    public function update(string $name, string $email): void
+    {
+        $this->name = $name;
+        $this->email = $email;
+        $this->updatedAt = CarbonImmutable::now()->utc();
+
+        // TODO: Dispatch UserUpdated event
+    }
+
 }

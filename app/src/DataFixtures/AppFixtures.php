@@ -13,10 +13,10 @@ class AppFixtures extends Fixture
     {
         UserFactory::createMany(10);
 
-        WorkEntryFactory::createMany(40,
-            function() {
-                return [ 'user' => UserFactory::random() ];
-            }
-        );
+//        WorkEntryFactory::createMany(40,
+//            function() {
+//                return [ 'user' => UserFactory::random() ];
+//            }
+//        );
     }
 }

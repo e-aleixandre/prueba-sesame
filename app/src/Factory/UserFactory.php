@@ -2,8 +2,8 @@
 
 namespace App\Factory;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
+use App\CoreContext\Domain\Model\User\User;
+use App\CoreContext\Domain\Model\User\UserRepository;
 use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
@@ -37,14 +37,25 @@ final class UserFactory extends ModelFactory
 
     protected function getDefaults(): array
     {
-        $createdAt = self::faker()->dateTime();
-        return [
+        $date = self::faker()->dateTime()->getTimestamp();
+
+        $user = [
             // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
             'name' => self::faker()->name(),
-            'email' => self::faker()->safeEmail(),
-            'createdAt' => $createdAt,
-            'updatedAt' => $createdAt,
+            'email' => self::faker()->safeEmail()
         ];
+
+        $deleted = self::faker()->boolean();
+
+        if ($deleted)
+        {
+            $user['deletedAt'] = $user['updatedAt'] = $date;
+            $user['createdAt'] = self::faker()->date($date);
+        }
+        else
+            $user['createdAt'] = $user['updatedAt'] = $date;
+
+        return $user;
     }
 
     protected function initialize(): self
