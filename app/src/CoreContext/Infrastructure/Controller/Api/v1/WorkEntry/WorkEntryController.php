@@ -4,6 +4,8 @@ namespace App\CoreContext\Infrastructure\Controller\Api\v1\WorkEntry;
 
 use App\CoreContext\Application\Command\WorkEntry\CreateWorkEntry;
 use App\CoreContext\Application\Command\WorkEntry\CreateWorkEntryHandler;
+use App\CoreContext\Application\Command\WorkEntry\DeleteWorkEntry;
+use App\CoreContext\Application\Command\WorkEntry\DeleteWorkEntryHandler;
 use App\CoreContext\Application\Command\WorkEntry\UpdateWorkEntry;
 use App\CoreContext\Application\Command\WorkEntry\UpdateWorkEntryHandler;
 use App\CoreContext\Application\Query\WorkEntry\FindWorkEntriesByUser;
@@ -116,5 +118,15 @@ class WorkEntryController extends AbstractController
 
         // TODO: Find a better ay to pass $workEntryQueryHandler
         return $this->show($command->id(), $findWorkEntryQueryHandler);
+    }
+
+    /** @Route("/workentries/{id}", methods={"DELETE"}) */
+    public function delete(string $id, DeleteWorkEntryHandler $deleteWorkEntryHandler)
+    {
+        $command = new DeleteWorkEntry($id);
+
+        $deleteWorkEntryHandler->handle($command);
+
+        return $this->json(null);
     }
 }
