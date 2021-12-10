@@ -24,7 +24,7 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
         return $this->find($id);
     }
 
-    /** @retrn User[] */
+    /** @return User[] */
     public function query($params): array
     {
         // TODO: Handle query params

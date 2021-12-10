@@ -32,7 +32,7 @@ class UpdateWorkEntryValidator extends BaseValidatorService
         return $this->payload(self::START_DATE);
     }
 
-    public function endDate(): string
+    public function endDate(): ?string
     {
         return $this->payload(self::END_DATE);
     }

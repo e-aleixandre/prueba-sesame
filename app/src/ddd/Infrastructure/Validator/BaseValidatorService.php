@@ -33,7 +33,7 @@ abstract class BaseValidatorService implements BaseValidatorInterface
         // TODO: Improve this
         foreach (array_keys($this->constraints()->fields) as $key)
         {
-            $this->payload[$key] = $data[$key];
+            $this->payload[$key] = $data[$key] ?? null;  // There are optional fields
         }
     }
 
