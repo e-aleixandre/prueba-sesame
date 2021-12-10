@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 abstract class BaseValidatorService implements BaseValidatorInterface
 {
     private ValidatorInterface $validator;
+    private array $payload;
 
     public function __construct(ValidatorInterface $validator)
     {
@@ -27,5 +28,17 @@ abstract class BaseValidatorService implements BaseValidatorInterface
             $message = $violation->getPropertyPath() . ": " . $violation->getMessage();
             throw new ValidatorException($message);
         }
+
+        // Populating the payload
+        // TODO: Improve this
+        foreach (array_keys($this->constraints()->fields) as $key)
+        {
+            $this->payload[$key] = $data[$key];
+        }
+    }
+
+    public function payload(string $key)
+    {
+        return $this->payload[$key] ?? null;
     }
 }

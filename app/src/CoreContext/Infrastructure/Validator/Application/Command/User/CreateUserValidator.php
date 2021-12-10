@@ -24,4 +24,14 @@ class CreateUserValidator extends BaseValidatorService
             ]
         ]);
     }
+
+    public function name(): string
+    {
+        return $this->payload(self::NAME);
+    }
+
+    public function email(): string
+    {
+        return $this->payload(self::EMAIL);
+    }
 }

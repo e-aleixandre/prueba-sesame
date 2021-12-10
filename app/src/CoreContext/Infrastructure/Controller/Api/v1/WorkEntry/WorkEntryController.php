@@ -85,14 +85,9 @@ class WorkEntryController extends AbstractController
     /** @Route("/workentries", methods={"POST"}) */
     public function create(Request $request, CreateWorkEntryHandler $handler, CreateWorkEntryValidator $validator)
     {
-        $params = $request->request->all();
+        $validator->validate($request->request->all());
 
-        $validator->validate($params);
-
-        // TODO: Validator should contain properties after validation to avoid null checking
-        $endDate = $params["endDate"] ?? null;
-
-        $command = new CreateWorkEntry($params["userId"], $params["startDate"], $endDate);
+        $command = new CreateWorkEntry($validator->userId(), $validator->startDate(), $validator->endDate());
 
         $handler->handle($command);
 
@@ -102,21 +97,17 @@ class WorkEntryController extends AbstractController
     /** @Route("/workentries/{id}", methods={"PUT"}) */
     public function update(string $id, Request $request, UpdateWorkEntryValidator $updateWorkEntryValidator,UpdateWorkEntryHandler $updateWorkEntryHandler, FindWorkEntryQueryHandler $findWorkEntryQueryHandler)
     {
-        $params = $request->request->all();
-
-        $updateWorkEntryValidator->validate($params);
-
-        $endDate = $params["endDate"] ?? null;
+        $updateWorkEntryValidator->validate($request->request->all());
 
         $command = new UpdateWorkEntry(
             $id,
-            $params["startDate"],
-            $endDate
+            $updateWorkEntryValidator->startDate(),
+            $updateWorkEntryValidator->endDate()
         );
 
         $updateWorkEntryHandler->handle($command);
 
-        // TODO: Find a better ay to pass $workEntryQueryHandler
+        // TODO: Find a better way to pass $workEntryQueryHandler
         return $this->show($command->id(), $findWorkEntryQueryHandler);
     }
 

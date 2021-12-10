@@ -58,13 +58,11 @@ class UserController extends AbstractController
     /** @Route("/users", methods={"POST"}) */
     public function create(Request $request, CreateUserHandler $userHandler, CreateUserValidator $createUserValidator): JsonResponse
     {
-        $params = $request->request->all();
-
-        $createUserValidator->validate($params);
+        $createUserValidator->validate($request->request->all());
 
         $command = new CreateUser(
-            $params["name"],
-            $params["email"]
+            $createUserValidator->name(),
+            $createUserValidator->email()
         );
 
         $userHandler->handle($command);
@@ -75,14 +73,12 @@ class UserController extends AbstractController
     /** @Route("/users/{userId}", methods={"PUT"}) */
     public function update(string $userId, Request $request, UpdateUserHandler $userHandler, FindUserQueryHandler $userQueryHandler, UpdateUserValidator $updateUserValidator): JsonResponse
     {
-        $params = $request->request->all();
-
-        $updateUserValidator->validate($params);
+        $updateUserValidator->validate($request->request->all());
 
         $command = new UpdateUser(
             $userId,
-            $params["name"],
-            $params["email"]
+            $updateUserValidator->name(),
+            $updateUserValidator->email()
         );
 
         $userHandler->handle($command);

@@ -33,4 +33,19 @@ class CreateWorkEntryValidator extends BaseValidatorService
             ]
         ]);
     }
+
+    public function userId(): string
+    {
+        return $this->payload(self::USER_ID);
+    }
+
+    public function startDate(): string
+    {
+        return $this->payload(self::START_DATE);
+    }
+
+    public function endDate(): string
+    {
+        return $this->payload(self::END_DATE);
+    }
 }

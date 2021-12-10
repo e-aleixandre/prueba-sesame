@@ -26,4 +26,14 @@ class UpdateWorkEntryValidator extends BaseValidatorService
             ]
         ]);
     }
+
+    public function startDate(): string
+    {
+        return $this->payload(self::START_DATE);
+    }
+
+    public function endDate(): string
+    {
+        return $this->payload(self::END_DATE);
+    }
 }
